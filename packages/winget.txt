@@ -27,9 +27,10 @@ Neovim.Neovim
 aristocratos.btop4win
 
 # Apps (mirrors arch-setup/packages/{pacman,aur}.txt app bindings)
-# Spotify.Spotify deliberately NOT here: its installer refuses to run
-# under an admin token at all (APPINSTALLER_CLI_ERROR_INSTALLER_PROHIBITS_ELEVATION),
-# and install.ps1 always runs elevated -- see packages/manual.txt.
+# Spotify.Spotify deliberately NOT here: `winget install` for it always
+# fails under an admin token (APPINSTALLER_CLI_ERROR_INSTALLER_PROHIBITS_ELEVATION),
+# and install.ps1 always runs elevated. steps/15-spotify.ps1 installs it
+# via a /extract workaround instead -- see that file for why.
 Mozilla.Firefox
 Obsidian.Obsidian
 AgileBits.1Password

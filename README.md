@@ -34,6 +34,7 @@ stay a manual, out-of-band copy either way.
 ```
 install.ps1                 Entry point: runs every steps/*.ps1 in order
 steps/10-packages.ps1        winget install everything in packages/winget.txt
+steps/15-spotify.ps1         Install Spotify via a /extract workaround (winget install always fails elevated)
 steps/20-tiling.ps1          Register komorebi + whkd autostart
 steps/30-shell.ps1           Register YASB + Flow Launcher autostart
 steps/40-keyboard.ps1        US-Dvorak input method, repeat rate, numlock

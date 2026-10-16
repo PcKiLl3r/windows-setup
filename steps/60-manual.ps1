@@ -19,12 +19,9 @@ Accounts / sign-ins
   [ ] 1Password: sign in + install browser extension
   [ ] Signal: link this device
   [ ] Docker Desktop: sign in, confirm WSL2 backend
-
-Spotify (always skipped by steps/10-packages.ps1 -- its installer refuses
-an admin token, and install.ps1 always runs elevated; not a flake, don't
-expect it to succeed on a re-run)
-  [ ] From a plain, non-elevated terminal:
-      winget install --exact --id Spotify.Spotify
+  [ ] Spotify: sign in (installed by steps/15-spotify.ps1's /extract
+      workaround -- won't self-update the normal way; re-run that step
+      later for a newer version)
 
 Secrets
   [ ] Copy SSH key onto this machine out-of-band (same step as
