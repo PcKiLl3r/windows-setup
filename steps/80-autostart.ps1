@@ -19,9 +19,12 @@ Write-Host "==> (Re)starting komorebi + whkd + YASB with linked configs"
 
 $komorebic = (Get-Command komorebic -ErrorAction SilentlyContinue).Source
 if ($komorebic) {
+    # Explicit --config, matching steps/20-tiling.ps1's autostart task --
+    # komorebi's default config dir is $HOME, not ~/.config/komorebi.
+    $komorebiConfig = "$HOME\.config\komorebi\komorebi.json"
     & $komorebic stop --whkd 2>$null
     Start-Sleep -Milliseconds 300
-    & $komorebic start --whkd
+    & $komorebic start --whkd --config "$komorebiConfig"
     Write-Host "    -> (re)started komorebi + whkd"
 } else {
     Write-Warning "komorebic not found -- run steps/10-packages.ps1 and steps/20-tiling.ps1 first."

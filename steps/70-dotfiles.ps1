@@ -9,7 +9,7 @@
 $ErrorActionPreference = 'Stop'
 
 $Dotfiles = if ($env:DOTFILES) { $env:DOTFILES } else { "$HOME\.dotfiles" }
-$Repo = 'git@github.com:PcKiLl3r/windows-dotfiles.git'
+$Repo = 'https://github.com/PcKiLl3r/windows-dotfiles.git'   # public repo, no credentials needed
 
 Write-Host "==> Syncing windows-dotfiles to $Dotfiles"
 

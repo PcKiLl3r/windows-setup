@@ -2,9 +2,22 @@
 # Registers komorebi and whkd to autostart, and starts them now if not running.
 # komorebi/whkd binaries themselves come from steps/10-packages.ps1 (winget).
 #
+# komorebi's default config location is $env:USERPROFILE itself, not
+# ~/.config/komorebi where windows-dotfiles links komorebi.json and
+# applications.json -- https://lgug2z.github.io/komorebi/common-workflows/komorebi-config-home.html.
+# Fixed two ways: an explicit --config flag on the autostart command (belt),
+# and a persistent KOMOREBI_CONFIG_HOME user env var (braces), since some
+# komorebi entry points (e.g. the YASB tray) read the env var instead of
+# accepting a flag.
+#
 # Idempotent: Unregister-ScheduledTask then Register-ScheduledTask is
-# last-write-wins; Start-Process checks for a running instance first.
+# last-write-wins; Start-Process checks for a running instance first;
+# SetEnvironmentVariable is last-write-wins.
 $ErrorActionPreference = 'Stop'
+
+$KomorebiConfigHome = "$HOME\.config\komorebi"
+[Environment]::SetEnvironmentVariable('KOMOREBI_CONFIG_HOME', $KomorebiConfigHome, 'User')
+$env:KOMOREBI_CONFIG_HOME = $KomorebiConfigHome
 
 function Register-AutostartTask {
     param([string]$Name, [string]$Exe, [string]$Args = '')
@@ -29,6 +42,6 @@ if (-not $whkd) {
     exit 1
 }
 
-Register-AutostartTask -Name 'omarchy-komorebi' -Exe $komorebic.Source -Args 'start --whkd'
+Register-AutostartTask -Name 'omarchy-komorebi' -Exe $komorebic.Source -Args "start --whkd --config `"$KomorebiConfigHome\komorebi.json`""
 
 Write-Host "==> Done. komorebi config (komorebi.json, applications.json) and whkdrc are linked by steps/70-dotfiles.ps1 -- start/restart komorebi after that step runs, not before."

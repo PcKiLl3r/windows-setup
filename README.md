@@ -8,6 +8,27 @@ system-level provisioning here, config symlinking in the separate
 [`windows-dotfiles`](https://github.com/PcKiLl3r/windows-dotfiles) repo,
 which this repo clones and runs as its second-to-last step.
 
+## Install -- one command
+
+On a fresh Windows 11 install, in stock (unelevated) PowerShell:
+
+```powershell
+irm https://raw.githubusercontent.com/PcKiLl3r/windows-setup/master/boot.ps1 | iex
+```
+
+One UAC prompt, then it runs to completion: installs Git + PowerShell 7,
+clones this repo, hands off to `install.ps1`, which installs everything
+else and links `windows-dotfiles`. Ends by printing the manual checklist
+(account sign-ins, the exact keyboard layout build, the keybinding audit --
+see below). Safe to re-run; every step is idempotent.
+
+**Both repos are public** -- unlike `arch-setup`/`.dotfiles`, which stay
+private. Neither holds secrets (checked: no keys, no tokens, just the
+user's name in `.gitconfig`), and public is what lets the one-liner clone
+with zero credentials on a machine that has none yet. The secrets/vault
+step (`arch-setup/steps/15-secrets.sh`) has no Windows port -- SSH keys etc.
+stay a manual, out-of-band copy either way.
+
 ## What's here
 
 ```
@@ -25,39 +46,14 @@ packages/winget.txt          Package ids, one per line
 packages/manual.txt          No-winget-id / sign-in-required items
 bin/Sync-Packages.ps1        Drift check: tracked vs. actually installed
 keyboard/README.md           Real Programmer Dvorak layout build instructions
+boot.ps1                     The one-liner's target -- bootstraps Git/pwsh7, then runs install.ps1
 ```
 
-## Install
-
-Both repos are private and cloned over SSH (`steps/70-dotfiles.ps1` clones
-`git@github.com:PcKiLl3r/windows-dotfiles.git`), so an SSH key registered
-with GitHub must exist before step 1 -- same prerequisite
-`arch-setup/README.md` states for Linux.
-
-1. Copy an SSH private key onto the machine out-of-band (USB drive, etc.)
-   and register it with `ssh-agent` / Pageant, or generate a new one with
-   `ssh-keygen` and add the public key at
-   https://github.com/settings/keys.
-2. Verify: `ssh -T git@github.com` should greet you by username.
-3. Install Git for Windows and PowerShell 7 if not already present (needed
-   just to run the clone + `install.ps1` itself):
-   ```powershell
-   winget install --exact --id Git.Git
-   winget install --exact --id Microsoft.PowerShell
-   ```
-4. Clone and run, from an **elevated** PowerShell 7 session (`#Requires
-   -Version 7` on every script; some steps -- Developer Mode, hotkey
-   registry, scheduled tasks -- need admin):
-   ```powershell
-   git clone git@github.com:PcKiLl3r/windows-setup.git $env:USERPROFILE\.setup
-   cd $env:USERPROFILE\.setup
-   ./install.ps1
-   ```
-5. Work through the checklist `steps/60-manual.ps1` prints at the end
-   (account sign-ins, the exact Real Programmer Dvorak layout build, the
-   keybinding audit).
-6. Sign out and back in once, so the Explorer hotkey release and scheduled
-   autostart tasks from steps 20/30/45 take full effect.
+`boot.ps1` is the only script here that must stay PowerShell 5.1 compatible
+(that's all a fresh box has); everything it hands off to requires
+PowerShell 7. Running `install.ps1` directly (skipping `boot.ps1`) needs an
+elevated PowerShell 7 shell and a prior Git + PowerShell 7 install --
+`boot.ps1` handles both and self-elevates.
 
 ## Keybinding audit
 
