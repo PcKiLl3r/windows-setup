@@ -29,15 +29,35 @@ keyboard/README.md           Real Programmer Dvorak layout build instructions
 
 ## Install
 
-```powershell
-git clone https://github.com/PcKiLl3r/windows-setup.git $env:USERPROFILE\.setup
-cd $env:USERPROFILE\.setup
-./install.ps1
-```
+Both repos are private and cloned over SSH (`steps/70-dotfiles.ps1` clones
+`git@github.com:PcKiLl3r/windows-dotfiles.git`), so an SSH key registered
+with GitHub must exist before step 1 -- same prerequisite
+`arch-setup/README.md` states for Linux.
 
-Run from an elevated PowerShell 7 session (`#Requires -Version 7` on every
-script) -- some steps (Developer Mode, hotkey registry, scheduled tasks)
-need it.
+1. Copy an SSH private key onto the machine out-of-band (USB drive, etc.)
+   and register it with `ssh-agent` / Pageant, or generate a new one with
+   `ssh-keygen` and add the public key at
+   https://github.com/settings/keys.
+2. Verify: `ssh -T git@github.com` should greet you by username.
+3. Install Git for Windows and PowerShell 7 if not already present (needed
+   just to run the clone + `install.ps1` itself):
+   ```powershell
+   winget install --exact --id Git.Git
+   winget install --exact --id Microsoft.PowerShell
+   ```
+4. Clone and run, from an **elevated** PowerShell 7 session (`#Requires
+   -Version 7` on every script; some steps -- Developer Mode, hotkey
+   registry, scheduled tasks -- need admin):
+   ```powershell
+   git clone git@github.com:PcKiLl3r/windows-setup.git $env:USERPROFILE\.setup
+   cd $env:USERPROFILE\.setup
+   ./install.ps1
+   ```
+5. Work through the checklist `steps/60-manual.ps1` prints at the end
+   (account sign-ins, the exact Real Programmer Dvorak layout build, the
+   keybinding audit).
+6. Sign out and back in once, so the Explorer hotkey release and scheduled
+   autostart tasks from steps 20/30/45 take full effect.
 
 ## Keybinding audit
 
