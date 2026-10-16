@@ -7,9 +7,17 @@
 $ErrorActionPreference = 'Stop'
 
 function Register-AutostartTask {
-    param([string]$Name, [string]$Exe, [string]$Args = '')
+    # Named $Arguments, not $Args -- see steps/20-tiling.ps1's copy of this
+    # function for why (collides with PowerShell's reserved automatic
+    # $args variable, and New-ScheduledTaskAction -Argument '' is itself
+    # invalid, not just -Argument $null).
+    param([string]$Name, [string]$Exe, [string]$Arguments = '')
     Unregister-ScheduledTask -TaskName $Name -Confirm:$false -ErrorAction SilentlyContinue
-    $action = New-ScheduledTaskAction -Execute $Exe -Argument $Args
+    if ($Arguments) {
+        $action = New-ScheduledTaskAction -Execute $Exe -Argument $Arguments
+    } else {
+        $action = New-ScheduledTaskAction -Execute $Exe
+    }
     $trigger = New-ScheduledTaskTrigger -AtLogOn
     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
     Register-ScheduledTask -TaskName $Name -Action $action -Trigger $trigger -Settings $settings -Force | Out-Null

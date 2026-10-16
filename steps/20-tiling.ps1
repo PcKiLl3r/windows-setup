@@ -20,9 +20,19 @@ $KomorebiConfigHome = "$HOME\.config\komorebi"
 $env:KOMOREBI_CONFIG_HOME = $KomorebiConfigHome
 
 function Register-AutostartTask {
-    param([string]$Name, [string]$Exe, [string]$Args = '')
+    # Named $Arguments, not $Args -- $args is PowerShell's reserved
+    # automatic variable for unbound positional parameters, and declaring
+    # a param literally called Args makes binding unreliable (this is what
+    # silently produced a null/empty value here on the real machine).
+    # New-ScheduledTaskAction's own -Argument also rejects an empty string,
+    # not just null, so it's only passed when there's something to pass.
+    param([string]$Name, [string]$Exe, [string]$Arguments = '')
     Unregister-ScheduledTask -TaskName $Name -Confirm:$false -ErrorAction SilentlyContinue
-    $action = New-ScheduledTaskAction -Execute $Exe -Argument $Args
+    if ($Arguments) {
+        $action = New-ScheduledTaskAction -Execute $Exe -Argument $Arguments
+    } else {
+        $action = New-ScheduledTaskAction -Execute $Exe
+    }
     $trigger = New-ScheduledTaskTrigger -AtLogOn
     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
     Register-ScheduledTask -TaskName $Name -Action $action -Trigger $trigger -Settings $settings -Force | Out-Null
@@ -42,6 +52,6 @@ if (-not $whkd) {
     exit 1
 }
 
-Register-AutostartTask -Name 'omarchy-komorebi' -Exe $komorebic.Source -Args "start --whkd --config `"$KomorebiConfigHome\komorebi.json`""
+Register-AutostartTask -Name 'omarchy-komorebi' -Exe $komorebic.Source -Arguments "start --whkd --config `"$KomorebiConfigHome\komorebi.json`""
 
 Write-Host "==> Done. komorebi config (komorebi.json, applications.json) and whkdrc are linked by steps/70-dotfiles.ps1 -- start/restart komorebi after that step runs, not before."

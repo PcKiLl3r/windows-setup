@@ -7,14 +7,6 @@
 # Idempotent: stop-if-running then start is safe to run repeatedly.
 $ErrorActionPreference = 'Stop'
 
-function Restart-Tool {
-    param([string]$ProcessName, [string]$Exe, [string]$Args = '')
-    Get-Process -Name $ProcessName -ErrorAction SilentlyContinue | Stop-Process -Force
-    Start-Sleep -Milliseconds 300
-    Start-Process -FilePath $Exe -ArgumentList $Args
-    Write-Host "    -> (re)started $ProcessName"
-}
-
 Write-Host "==> (Re)starting komorebi + whkd + YASB with linked configs"
 
 $komorebic = (Get-Command komorebic -ErrorAction SilentlyContinue).Source
