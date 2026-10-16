@@ -1,4 +1,8 @@
 # winget package ids, one per line. # comments and blank lines are skipped.
+# An id may be followed by `|<extra winget args>` for packages that need
+# flags beyond the common set applied to every line (see
+# steps/10-packages.ps1) -- e.g. Battle.net's manifest demands an explicit
+# install location even with --disable-interactivity.
 # Tiling WM stack
 LGUG2Z.komorebi
 LGUG2Z.whkd
@@ -29,8 +33,8 @@ AgileBits.1Password
 OpenWhisperSystems.Signal
 Spotify.Spotify
 Docker.DockerDesktop
-Typora.Typora
+appmakes.Typora
 
 # Games
 Valve.Steam
-Blizzard.BattleNet
+Blizzard.BattleNet|--location "C:\Program Files (x86)\Battle.net"

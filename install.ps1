@@ -12,6 +12,17 @@ if (-not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Adm
 }
 
 foreach ($step in Get-ChildItem steps/*.ps1 | Sort-Object Name) {
+    # Refresh PATH from the registry before every step. Each step below
+    # runs as a NEW pwsh process, but it inherits the current process's
+    # (this loop's) in-memory env block, not a fresh read of the registry
+    # -- so without this, a package steps/10-packages.ps1 just installed
+    # (komorebi, whkd, yasb, Flow Launcher, ...) is invisible to the very
+    # next step that needs its binary on PATH. Same two lines boot.ps1
+    # already uses once before handing off to this script.
+    $machinePath = [Environment]::GetEnvironmentVariable('Path', 'Machine')
+    $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
+    $env:Path = $machinePath + ';' + $userPath
+
     Write-Host "`n=========================================="
     Write-Host "  $($step.Name)"
     Write-Host "=========================================="
