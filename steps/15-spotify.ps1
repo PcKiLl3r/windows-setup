@@ -40,8 +40,26 @@ if (Test-Path $downloadDir) {
 }
 New-Item -ItemType Directory -Path $downloadDir -Force | Out-Null
 
-winget download --exact --id Spotify.Spotify -d $downloadDir --accept-source-agreements --accept-package-agreements
-if ($LASTEXITCODE -ne 0) {
+# Retry on the transient WinINet error (-2147012889, InternetOpenUrl()
+# failed) the same way steps/10-packages.ps1 does -- Spotify's CDN has
+# hit this on a real run here more than once, so one blip shouldn't
+# permanently skip it.
+$attempt = 1
+$maxAttempts = 3
+$downloaded = $false
+while (-not $downloaded -and $attempt -le $maxAttempts) {
+    winget download --exact --id Spotify.Spotify -d $downloadDir --accept-source-agreements --accept-package-agreements
+    if ($LASTEXITCODE -eq 0) {
+        $downloaded = $true
+    } elseif ($LASTEXITCODE -eq -2147012889 -and $attempt -lt $maxAttempts) {
+        Write-Warning "winget download hit a transient network error (attempt $attempt/$maxAttempts) -- retrying in 10s"
+        Start-Sleep -Seconds 10
+    } else {
+        break
+    }
+    $attempt++
+}
+if (-not $downloaded) {
     Write-Warning "winget download failed for Spotify.Spotify (exit $LASTEXITCODE) -- skipping. Try manually: winget download --exact --id Spotify.Spotify"
     exit 0
 }
