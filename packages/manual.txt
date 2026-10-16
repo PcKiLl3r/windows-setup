@@ -1,5 +1,6 @@
 # Things with no winget id, or that need an account/sign-in step first.
 # One item per line, consumed only by steps/60-manual.ps1's printed checklist.
+Spotify: from a NON-elevated terminal, run `winget install --exact --id Spotify.Spotify` (its installer refuses an admin token, always -- not fixable by retrying inside install.ps1)
 Real Programmer Dvorak custom keyboard layout (keyboard/RealProgDvorak.msi)
 Battle.net account sign-in + game installs (library paths are machine-specific)
 Steam account sign-in + library folder setup

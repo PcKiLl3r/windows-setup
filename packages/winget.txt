@@ -27,11 +27,13 @@ Neovim.Neovim
 aristocratos.btop4win
 
 # Apps (mirrors arch-setup/packages/{pacman,aur}.txt app bindings)
+# Spotify.Spotify deliberately NOT here: its installer refuses to run
+# under an admin token at all (APPINSTALLER_CLI_ERROR_INSTALLER_PROHIBITS_ELEVATION),
+# and install.ps1 always runs elevated -- see packages/manual.txt.
 Mozilla.Firefox
 Obsidian.Obsidian
 AgileBits.1Password
 OpenWhisperSystems.Signal
-Spotify.Spotify
 Docker.DockerDesktop
 appmakes.Typora
 

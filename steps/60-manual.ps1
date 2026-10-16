@@ -20,6 +20,12 @@ Accounts / sign-ins
   [ ] Signal: link this device
   [ ] Docker Desktop: sign in, confirm WSL2 backend
 
+Spotify (always skipped by steps/10-packages.ps1 -- its installer refuses
+an admin token, and install.ps1 always runs elevated; not a flake, don't
+expect it to succeed on a re-run)
+  [ ] From a plain, non-elevated terminal:
+      winget install --exact --id Spotify.Spotify
+
 Secrets
   [ ] Copy SSH key onto this machine out-of-band (same step as
       arch-setup/steps/15-secrets.sh handles on Linux -- no Windows port
