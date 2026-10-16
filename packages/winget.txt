@@ -1,0 +1,36 @@
+# winget package ids, one per line. # comments and blank lines are skipped.
+# Tiling WM stack
+LGUG2Z.komorebi
+LGUG2Z.whkd
+AmN.yasb
+Flow-Launcher.Flow-Launcher
+
+# Terminal / shell
+Alacritty.Alacritty
+Git.Git
+GitHub.cli
+dandavison.delta
+Microsoft.PowerShell
+Microsoft.WindowsTerminal
+
+# Helpers for hotkey release + AHK fallback binds
+Microsoft.PowerToys
+AutoHotkey.AutoHotkey
+
+# CLI tools (mirrors arch-setup/packages/pacman.txt where a winget id exists)
+7zip.7zip
+Neovim.Neovim
+aristocratos.btop4win
+
+# Apps (mirrors arch-setup/packages/{pacman,aur}.txt app bindings)
+Mozilla.Firefox
+Obsidian.Obsidian
+AgileBits.1Password
+OpenWhisperSystems.Signal
+Spotify.Spotify
+Docker.DockerDesktop
+Typora.Typora
+
+# Games
+Valve.Steam
+Blizzard.BattleNet

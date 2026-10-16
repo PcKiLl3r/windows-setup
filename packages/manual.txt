@@ -1,0 +1,9 @@
+# Things with no winget id, or that need an account/sign-in step first.
+# One item per line, consumed only by steps/60-manual.ps1's printed checklist.
+Real Programmer Dvorak custom keyboard layout (keyboard/RealProgDvorak.msi)
+Battle.net account sign-in + game installs (library paths are machine-specific)
+Steam account sign-in + library folder setup
+1Password sign-in + browser extension
+Signal account linking
+Docker Desktop WSL2 backend sign-in
+SSH key copy from Omarchy vault (manual, out of band -- see arch-setup/steps/15-secrets.sh)
